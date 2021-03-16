@@ -1,6 +1,11 @@
-from VrepAPI import *
 import IDList
 import FunctionList
+import ObjectStatus
+import VrepAPI
+
+from flask import Flask
+
+app = Flask(__name__)
 
 
 class cid:
@@ -13,9 +18,10 @@ def id_add(name):
     return name, gid
 
 
+@app.route('/')
 def newbot():
     print('newbot')
-    v_rep = VrepAPI()
+    v_rep = VrepAPI.VrepAPI()
     cid.cid = v_rep.clientID
 
     id_list = IDList.IDList()
@@ -30,9 +36,10 @@ def newbot():
                     'Fake_behind_door',
                     ]
     for item in id_name_list:
-        id_list.add_id(id_add(item))
+        name, gid = id_add(item)
+        id_list.add_id(name, gid)
 
-    status_list = ObjectStatus()
+    status_list = ObjectStatus.ObjectStatus()
     status_name_list = ['cup_type',
                         'door_type',
                         'in_room_type',
@@ -48,8 +55,12 @@ def newbot():
                         ]
     for item in status_name_list:
         status_list.add_status(item, 0)
-    status_list.object_status[5] = 1
+    status_list.object_status[5]['status'] = 1
+
+    print(id_list.id_list)
+    print(status_list.object_status)
+    return id_list.id_list[1]
 
 
 if __name__ == "__main__":
-    newbot()
+    app.run(host='0.0.0.0', port=5000, debug=True)

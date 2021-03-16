@@ -7,7 +7,7 @@ import IDList
 
 class FunctionList:
     function_list = [
-        '',
+        {'', },
         '',
         '',
         '',

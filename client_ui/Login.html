@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>登录</title>
+<!--		<link  rel="stylesheet" href="css/Login.css" />-->
+		<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+		<!-- 引入样式 -->
+		<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+		<!-- 引入组件库 -->
+		<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+	</head>
+	<body>
+		
+		<div id="app">
+<!--			<div class="class1">-->
+<!--				<div class="class2">-->
+<!--					<span class="nava">-->
+<!--						<a :class="{a: 0===currentType}" @click="changeType1" style="font-weight: 800;">个人登录</a>-->
+<!--					</span>-->
+<!--					<span class="nava2">-->
+<!--						<a :class="{a: 1===currentType}" @click="changeType2" style="font-weight: 800;">法人登录</a>-->
+<!--					</span>-->
+<!--				</div>-->
+<!--				<div class="class3">-->
+<!--					&lt;!&ndash; <span style="font-size: 18px;padding-left: 100px;">密码登录</span> &ndash;&gt;-->
+<!--					<div class="class4">-->
+<!--						<input type="text" placeholder="用户名/手机号码/身份证" v-model="user.username"/>-->
+<!--					</div>-->
+<!--					<div class="class5">-->
+<!--						<input type="password" placeholder="密码" v-model="user.password"/>-->
+<!--					</div>-->
+<!--					<div class="class6">-->
+<!--						<span>-->
+<!--							<a  v-show="0===currentType">其他证件登录</a>-->
+<!--						</span>-->
+<!--						<span style="margin-left: 130px;">-->
+<!--							<a style="float: right;">忘记密码</a>-->
+<!--						</span>-->
+<!--					</div>-->
+<!--					<div class="class7">-->
+<!--						<button @click="login">登录</button>-->
+<!--					</div>-->
+<!--					<div class="class9" v-show="currentType===1">-->
+<!--						<button>法人数字证书登录</button>-->
+<!--					</div>-->
+<!--					<div class="class8">-->
+<!--						还没有账号？-->
+<!--						<a style="color: blue; text-decoration: none;" href="Register.html">去注册</a>-->
+<!--					</div>-->
+<!--				</div>-->
+<!--				-->
+<!--			</div>-->
+			<el-input v-model="num" type="number" placeholder="请输入内容"></el-input>
+			<el-button type="primary" @click="commit_1">开始</el-button>
+			<a>{{num2}}</a>
+		</div>
+		
+		
+		<script src="js/Login.js"></script>
+		
+	</body>
+</html>

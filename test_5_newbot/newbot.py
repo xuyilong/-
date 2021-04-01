@@ -2,64 +2,69 @@ import IDList
 import FunctionList
 import ObjectStatus
 import VrepAPI
-
+from flask import jsonify
+from flask_cors import CORS
 from flask import Flask
+from flask import request
 
 app = Flask(__name__)
-
-
-class cid:
-    cid = None
+CORS(app, resources=r'/*')
 
 
 def id_add(name):
     bname = bytes(name, encoding="utf8")
-    gid = FunctionList.get_id(cid.cid, bname)
+    gid = FunctionList.get_id(bname)
     return name, gid
 
 
-@app.route('/')
+@app.route('/hello')
+def hello():
+    return 'Hello,world!'
+
+
+@app.route('/calling_condition_function', methods=['post'])
+def calling_condition_function():
+    print(request.json)
+    name = request.json.get('name')
+    parm = request.json.get('parm')
+    # 在这里使用setattr
+    if hasattr(FunctionList, name):
+        print('正在执行条件方法')
+        if getattr(FunctionList, name)(**parm):
+            return 'right'
+    else:
+        print("------------------------404", '*'*20)
+    return 'wrong'
+
+
+@app.route('/calling_action_function', methods=['post'])
+def calling_action_function():
+    print(request.json)
+    name = request.json.get('name')
+    parm = request.json.get('parm')
+    # 在这里使用setattr
+    if hasattr(FunctionList, name):
+        print('正在执行动作方法')
+        getattr(FunctionList, name)(**parm)
+    else:
+        print("------------------------404", '*'*20)
+    return 'wrong'
+
+
+@app.route('/get_list', methods=['get'])
 def newbot():
     print('newbot')
-    v_rep = VrepAPI.VrepAPI()
-    cid.cid = v_rep.clientID
+    VrepAPI.VrepAPI()
 
-    id_list = IDList.IDList()
-    id_name_list = ['newbot_vehicleTargetPosition',
-                    'newbot_reference',
-                    'Jaco_target',
-                    'Fake_table',
-                    'Fake_cup',
-                    'goalLocation',
-                    'cup_0',
-                    'Fake_front_door',
-                    'Fake_behind_door',
-                    ]
-    for item in id_name_list:
-        name, gid = id_add(item)
-        id_list.add_id(name, gid)
+    for item in IDList.IDList.id_list:
+        id_name = item.get('name')
+        name, gid = id_add(id_name)
+        IDList.change_value(name, gid)
 
-    status_list = ObjectStatus.ObjectStatus()
-    status_name_list = ['cup_type',
-                        'door_type',
-                        'in_room_type',
-                        'lh_have_pot_type',
-                        'rh_have_cup_type',
-                        'path_free_type',
-                        'search_table_type',
-                        'search_rack_type',
-                        'st_for_coffee_type',
-                        'sr_for_coffee_type',
-                        'searching_type',
-                        'search_type',
-                        ]
-    for item in status_name_list:
-        status_list.add_status(item, 0)
-    status_list.object_status[5]['status'] = 1
-
-    print(id_list.id_list)
-    print(status_list.object_status)
-    return id_list.id_list[1]
+    print('newbot')
+    return jsonify(IDList.IDList.id_list, ObjectStatus.ObjectStatus.status_list,
+                   FunctionList.FunctionList.action_function_list,
+                   FunctionList.FunctionList.condition_function_list)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,17 @@
+.el-row {
+	margin-bottom: 20px;
+}
+.el-col {
+	border-radius: 4px;
+	background-color: #5b5b5d;
+	margin: 20px;
+}
+.el-table{
+	border-radius: 10px
+}
+.div{
+	background-color: #818181;
+	border: 4px black;
+	border-radius: 10px;
+	margin: 5px;
+}

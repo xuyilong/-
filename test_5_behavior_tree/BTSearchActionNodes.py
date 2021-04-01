@@ -1,8 +1,35 @@
+import requests
+
 from ActionNode import *
 from NodeStatus import *
-import VrepAPI
 import sys
 sys.path.insert(0, 'bt/')
+
+
+# 创
+class SubActionNode(ActionNode):
+
+    def __init__(self, name, **parm):
+        ActionNode.__init__(self, name)
+        self.name = name
+        self.parm = parm['parm']
+        for i in self.parm:
+            # print('i=', i)
+            setattr(self, i, self.parm[i])
+
+    def Execute(self, args):
+        calling_action_function(self.name, self.parm)
+        self.SetStatus(NodeStatus.Running)
+        self.SetColor(NodeColor.Gray)
+        print('excuting...')
+
+
+# 一个奇怪的方法
+def calling_action_function(name, parm):
+    kv = {'name': name, 'parm': parm}
+    r = requests.post('http://localhost:5000/calling_action_function', json=kv)
+    r.encoding = 'utf-8'
+    # print('r:', r.text)
 
 
 # 应该抽象成action_node

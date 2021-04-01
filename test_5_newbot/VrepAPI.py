@@ -15,6 +15,7 @@ import time
 
 from ObjectStatus import ObjectStatus
 from IDList import IDList
+from IDList import clientID
 
 
 class VrepAPI:
@@ -22,7 +23,7 @@ class VrepAPI:
     def __init__(self):
         vrep.simxFinish(-1)  # just in case, close all opened connections
         self.clientID = vrep.simxStart(b'127.0.0.1', 19997, True, True, 5000, 5)  # Connect to V-REP
-        IDList.clientID = self.clientID
+        clientID.mainID = self.clientID
         if self.clientID != -1:
             print('Connected to remote API server')
         else:

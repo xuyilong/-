@@ -1,0 +1,87 @@
+*{
+	margin: 0;
+	padding: 0;
+}
+#app{
+	width: 100%;
+	height: 200%;
+	position: absolute;
+	background-color: #e2e2e2;
+}
+.class0{
+	width: 100%;
+	height: 100px;
+	border: none;
+	background-color: white;
+	margin: 0 auto;
+}
+.class0 img{
+	margin-top: 20px;
+	margin-left: 300px;
+	vertical-align: middle;
+}
+
+.class1{
+	width: 700px;
+	height: 800px;
+	margin: 30px auto;
+	border: #808080 solid 1px;
+	border-radius: 5px;
+	background-color: white;
+	
+}
+.class2{
+	width: 640px;
+	height: 40px;
+	margin-top: 60px;
+	margin-left: 30px;
+	border: #808080 solid 1px;
+	border-top-style: none;
+	border-left-style: none;
+	border-right-style: none;
+}
+.class3{
+	width: 500px;
+	margin: 20px auto;
+	border: none;
+}
+.class4{
+	margin-top: 10px;
+}
+.class4 input{
+	width: 450px;
+	height: 35px;
+	font-size: 15px;
+}
+.class5{
+	margin-top: 10px;
+}
+.class5 input{
+	width: 320px;
+	height: 35px;
+	font-size: 15px;
+	vertical-align:middle;
+}
+.class5 img{
+	width: 130px;
+	height: 40px;
+	border-radius: 5px;
+	vertical-align:middle;
+}
+.class5 button{
+	width: 130px;
+	height: 40px;
+	border: none;
+	background-color: #CDCDB4;
+}
+.class6{
+	margin: 50px auto;
+}
+.class6 button{
+	width: 400px;
+	height: 50px;
+	background-color: #6A5ACD;
+	font-size: 20px;
+	color: white;
+	outline: none;
+}

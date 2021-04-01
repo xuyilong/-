@@ -1,0 +1,102 @@
+*{
+	margin: 0;
+	padding: 0;
+}
+.class1{
+	border: 1px black;
+	border-radius: 10px;
+	width: 450px;
+	height: 550px;
+	background-color: white;
+	margin-top: 150px;
+	margin-right: 100px;
+	margin-left: 900px;
+	
+}
+#app{
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	background: aquamarine url(../img/LoginBack.jpg) no-repeat;
+	background-size: cover;
+}
+.nava{
+	width: 88px;
+	height: 23px;
+	font-size: 22px;
+	margin-left: 70px;
+}
+.nava2{
+	width: 88px;
+	height: 23px;
+	font-size: 22px;
+	margin-left: 110px;
+}
+.class2{
+	width: 400px;
+	height: 70px;
+	padding-top: 50px;
+	
+}
+.class3{
+	width: 300px;
+	height: 450px;
+	padding-top: 0px;
+	padding-left: 80px;
+	
+}
+.class4{
+	width: 200px;
+	height: 50px;
+	margin-top: 50px;
+}
+.class4 input{
+	width: 300px;
+	height: 40px;
+	outline: none;
+	border-top-style: none;
+	border-left-style: none;
+	border-right-style: none;
+	border-bottom-style: 1px solid black;
+	font-size: 15px;
+}
+.class5{
+	width: 200px;
+	height: 50px;
+	margin-top: 25px;
+}
+.class5 input{
+	width: 300px;
+	height: 40px;
+	outline: none;
+	border-top-style: none;
+	border-left-style: none;
+	border-right-style: none;
+	border-bottom-style: 1px solid black;
+	font-size: 15px;
+}
+.class7 button{
+	width: 300px;
+	height: 50px;
+	background-color: #1196EE;
+	margin-top: 50px;
+	font-size: 18px;
+	outline: none;
+	color: white;
+}
+.class9 button{
+	width: 300px;
+	height: 50px;
+	border: 1px,solid,blue;
+	background-color: white;
+	font-size: 18px;
+	color: blue;
+	margin-top: 10px;
+}
+.class8{
+	margin-top: 50px;
+	margin-left: 60px;
+}
+.a{
+	color: blue;
+}

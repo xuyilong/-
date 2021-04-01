@@ -1,26 +1,38 @@
 class ObjectStatus:
-    def __init__(self, object_status=None):
-        if object_status is None:
-            object_status = []
-        self.object_status = object_status
+    status_list = [{'name': 'cup_type', 'status': 0},
+                   {'name': 'door_type', 'status': 0},
+                   {'name': 'lh_have_pot_type', 'status': 0},
+                   {'name': 'rh_have_cup_type', 'status': 0},
+                   {'name': 'path_free_type', 'status': 1},
+                   {'name': 'search_table_type', 'status': 0},
+                   {'name': 'search_rack_type', 'status': 0},
+                   {'name': 'st_for_coffee_type', 'status': 0},
+                   {'name': 'sr_for_coffee_type', 'status': 0},
+                   {'name': 'searching_type', 'status': 0},
+                   {'name': 'search_type', 'status': 0},
+                   ]
 
-    def add_status(self, name, status):
-        self.object_status.append({'name': name, 'status': status})
 
-    def show_object_status(self):
-        num = len(self.object_status)
-        print('Now we have %d object(s)' % num)
-        print('They are:', self.object_status)
+def find(name):
+    for item in ObjectStatus.status_list:
+        if item.get('name') == name:
+            return item.get('status')
+    return -1
 
-    # cup_type = 0
-    # door_type = 0
-    # in_room_type = 0
-    # lh_have_pot_type = 0
-    # rh_have_cup_type = 0
-    # path_free_type = 1
-    # search_table_type = 0
-    # search_rack_type = 0
-    # st_for_coffee_type = 0
-    # sr_for_coffee_type = 0
-    # searching_type = 0
-    # search_type = 0
+
+def change(name, status):
+    for item in ObjectStatus.status_list:
+        if item.get('name') == name:
+            item['status'] = status
+            return
+    return
+
+
+def add_status(name, status):
+    ObjectStatus.status_list.append({'name': name, 'status': status})
+
+
+def show_status_list():
+    num = len(ObjectStatus.status_list)
+    print('Now we have %s object(s)' % num)
+    print('They are:', ObjectStatus.status_list)

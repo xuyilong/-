@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>测试</title>
+		<link  rel="stylesheet" href="css/Test.css" />
+		<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+		<!-- 引入样式 -->
+		<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+		<!-- 引入组件库 -->
+		<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+	</head>
+	<body>
+		
+		<div id="app">
+			<el-row>
+				<el-col :span="6"><div class="div">
+					<el-table
+							:data="id_list"
+							height="500">
+						<el-table-column
+								prop="name"
+								label="物体名称"
+								width="250">
+						</el-table-column>
+						<el-table-column
+								prop="value"
+								label="物体ID"
+								width="250">
+						</el-table-column>
+					</el-table>
+				</div></el-col>
+				<el-col :span="6"><div class="div">
+					<el-table
+							:data="status_list"
+							height="500">
+						<el-table-column
+								prop="name"
+								label="状态名称"
+								width="250">
+						</el-table-column>
+						<el-table-column
+								prop="status"
+								label="状态"
+								width="250">
+						</el-table-column>
+					</el-table>
+				</div></el-col>
+				<el-col :span="6"><div class="div">
+					<el-table
+							:data="action_show_list"
+							height="500">
+						<el-table-column
+								prop="name"
+								label="动作名称"
+								width="250">
+						</el-table-column>
+						<el-table-column
+								prop="parm"
+								label="动作参数"
+								width="250">
+						</el-table-column>
+					</el-table>
+				</div></el-col>
+				<el-col :span="6"><div class="div">
+					<el-table
+							:data="condition_show_list"
+							height="500">
+						<el-table-column
+								prop="name"
+								label="条件名称"
+								width="250">
+						</el-table-column>
+						<el-table-column
+								prop="parm"
+								label="动作参数"
+								width="250">
+						</el-table-column>
+					</el-table>
+				</div></el-col>
+			</el-row>
+			<div>
+				{{name}}
+				<el-select v-model="name" placeholder="请选择">
+					<el-option
+					  v-for="item in action_list"
+					  :key="item.name"
+					  :label="item.name"
+					  :value="item.name">
+					</el-option>
+				</el-select>
+			</div>
+
+		</div>
+		
+		
+		<script src="js/Test.js"></script>
+		
+	</body>
+</html>

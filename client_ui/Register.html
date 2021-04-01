@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>注册</title>
+		<link rel="stylesheet" href="css/Register.css"/>
+		<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	</head>
+	<body>
+		<div id="app">
+			<div class="class0">
+				<img src="img/logo2.png" />
+			</div>
+			<div class="class1">
+				<div class="class2">
+					<span>
+						<a style="font-size: 20px;color: blue;">创建账号</a>
+						<a style="font-size: 20px;color: blue;">></a>
+						<a style="font-size: 20px;">实名认证</a>
+					</span>
+					
+				</div>
+				<div class="class3">
+					<div>
+						<div>
+							<span>
+								<a style="font-weight: 800;">请输入用户名</a>
+								<a style="color: red;">*</a>
+							</span>
+						</div>
+						<div class="class4">
+							<input type="text" placeholder="4~20位字符,支持字母数字组合"  v-model="username"/>
+						</div>
+					</div>
+					<div style="margin-top: 25px;">
+						<div>
+							<span>
+								<a style="font-weight: 800;">请输入手机号</a>
+								<a style="color: red;">*</a>
+							</span>
+						</div>
+						<div class="class4">
+							<input type="tel" placeholder="请输入您的手机号码" v-model="usertel"/>
+						</div>
+					</div>
+					<div style="margin-top: 25px;">
+						<div class="class5">
+							<input type="text" placeholder="请输入图片验证码"/>
+							<img src="img/LoginBack.jpg" />
+						</div>
+					</div>
+					<div style="margin-top: 15px;">
+						<div class="class5">
+							<input type="text" placeholder="请输入手机验证码"/>
+							<button>获取短信验证码</button>
+						</div>
+					</div>
+					<div style="margin-top: 35px;">
+						<span>
+							<a style="font-weight: 800;">请设置密码</a>
+							<a style="color: red;">*</a>
+						</span>
+					</div>
+					<div>
+						<div class="class4">
+							<input type="password" placeholder="6~20位字符" v-model="userpassword1"/>
+						</div>
+						<div class="class4">
+							<input type="password" placeholder="请输入确认密码" v-model="userpassword2"/>
+						</div>
+					</div>
+					<div class="class6">
+						<button style="margin-left: 20px;" @click="register">注册</button>
+					</div>
+					<div style="text-align: center;">
+						<span>
+							<input type="checkbox" style="width: 20px;height: 20px;" v-model="isagree"/>
+							<a>我已阅读并同意</a>
+							<a style="color: blue">《政务机构网站服务协议》</a>
+						</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="js/Register.js"></script>
+<!-- 		<script src="https://unpkg.com/axios/dist/axios.min.js">
+			axios({
+				url:'123.207.32:8080/home/multidata'
+			}).then(res=>{
+				console.log(res);
+			})
+		</script> -->
+		
+	</body>
+</html>

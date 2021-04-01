@@ -1,28 +1,40 @@
 class IDList:
-    def __init__(self, id_list=None):
-        if id_list is None:
-            id_list = []
-        self.id_list = id_list
-
-    def add_id(self, name, value):
-        self.id_list.append({'name': name, 'value': value})
-
-    def show_id_list(self):
-        num = len(self.id_list)
-        print('Now we have %s object(s)' % num)
-        print('They are:', self.id_list)
+    id_list = [{'name': 'newbot_vehicleTargetPosition', 'value': None},
+               {'name': 'newbot_reference', 'value': None},
+               {'name': 'Jaco_target', 'value': None},
+               {'name': 'Fake_table', 'value': None},
+               {'name': 'Fake_cup', 'value': None},
+               {'name': 'goalLocation', 'value': None},
+               {'name': 'cup_0', 'value': None},
+               {'name': 'Fake_front_door', 'value': None},
+               {'name': 'Fake_behind_door', 'value': None},
+               ]
 
 
+class clientID:
+    mainID = None
 
-    # clientID = None
-    # newbot_vehicle_target_id = None
-    # newbot_ref_id = None
-    # right_gripper_id = None
-    # table_id = None
-    # cup_id = None
-    # goal_id = None
-    # cup0_id = None
-    # front_door_id = None
-    # behind_door_id = None
-    # current_object_goal_id = None
-    # current_object_to_move_to_goal = None
+
+def change_value(name, value):
+    for item in IDList.id_list:
+        if item.get('name') == name:
+            item['value'] = value
+
+
+def add_id(name, value):
+    IDList.id_list.append({'name': name, 'value': value})
+
+
+def find(name):
+    for item in IDList.id_list:
+        if item.get('name') == name:
+            return item.get('value')
+    print('find wrong')
+    return -1
+
+
+def show_id_list():
+    num = len(IDList.id_list)
+    print('Now we have %s object(s)' % num)
+    print('They are:', IDList.id_list)
+

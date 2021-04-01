@@ -1,7 +1,41 @@
+import requests
+from flask import json
+
 from ConditionNode import ConditionNode
 from NodeStatus import *
-from ObjectStatus import ObjectStatus
-import VrepAPI
+
+
+# 创
+class SubConditionNode(ConditionNode):
+
+    def __init__(self, name, **parm):
+        ConditionNode.__init__(self, name)
+        self.name = name
+        self.parm = parm['parm']
+        self.flag = 0
+        print('aaaa', self.parm)
+        for i in self.parm:
+            # print('i=', i)
+            setattr(self, i, self.parm[i])
+
+    def Execute(self, args):
+        # 涉及到跨域的问题
+        flag = calling_condition_function(self.name, self.parm)
+        if flag == 'right':
+            self.SetStatus(NodeStatus.Success)
+            self.SetColor(NodeColor.Green)
+        else:
+            self.SetStatus(NodeStatus.Failure)
+            self.SetColor(NodeColor.Red)
+
+
+# 一个奇怪的方法
+def calling_condition_function(name, parm):
+    kv = {'name': name, 'parm': parm}
+    r = requests.post('http://localhost:5000/calling_condition_function', json=kv)
+    r.encoding = 'utf-8'
+    # print('r:', r.text)
+    return r.text
 
 
 # 同理，要将条件也改成节点形式
@@ -85,3 +119,8 @@ class TypeOK(ConditionNode):
             self.SetStatus(NodeStatus.Failure)
             self.SetColor(NodeColor.Red)
 
+
+if __name__ == '__main__':
+    name = 'test_name'
+    parm = {'parm1': 'args1'}
+    calling_condition_function(name, parm)

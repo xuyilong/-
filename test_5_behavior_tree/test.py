@@ -4,6 +4,7 @@ from flask import jsonify
 from flask_cors import CORS
 from flask import Flask
 from flask import request
+import requests
 
 from SequenceNode import SequenceNode
 from FallbackNode import FallbackNode
@@ -28,42 +29,46 @@ def receive_goal_node():
 
 @app.route('/sendSubtreeList', methods=['post'])
 def receive_subtree():
-    print(request.json)
+    # print(request.json)
     # 获得后应存储在一个地方
     GlobalVar.subtree_list = request.json
     return 'sendSubtreeList'
 
 
 @app.route('/start_and_end', methods=['get'])
-def receive_start_signal():
-    print('in this?')
-    print(request.args.get('sig'))
-    flag = request.args.get('sig')
-    execute(flag)
+def receive_start_and_end_signal():
+    Node.flag = request.args.get('sig')
+    # print('flag.type', Node.flag, type(Node.flag))
+    s_and_e(Node.flag)
+    if Node.done == 0 and Node.flag == '1':
+        init_tree()
+        Node.done = 1
+    elif Node.flag == '1':
+        execute(Node.root)
+    print('start_and_end 结束')
     return 'start_and_end'
 
 
 class Node:
+    root = None
     goal_node = {}
+    done = 0
+    flag = ''
 
 
-def execute(flag):
-    print('now test execution')
-    print('读取到的GoalNode:', Node.goal_node)
-    root = FallbackNode('root')
-    # 在这里添加目标节点
-    if Node.goal_node != {}:
-        goal_node = SubConditionNode(**Node.goal_node)
-        root.AddChild(goal_node)
-        Node.goal_node = {}
+# 控制仿真的开始与暂停
+def s_and_e(flag):
+    r = requests.get('http://localhost:5000/s_and_e?flag='+flag)
+    r.encoding = 'utf-8'
+    # print('r:', r.text)
+    return r.text
 
-    draw_thread = threading.Thread(target=new_draw_tree, args=(root,))
-    draw_thread.start()
 
-    while flag == 1:
-
+def execute(root):
+    while Node.flag == '1':
+        # 传输控制信号
         print('-------------执行前------------------')
-        while True:
+        while Node.flag == '1':
             root.Execute(None)
             time.sleep(1)
             if root.GetStatus() == 1:
@@ -72,7 +77,7 @@ def execute(flag):
         print('-------------执行后-----------------')
 
         if FailNode.failChildNode is None:
-            continue
+            return 0
         childNode = FailNode.failChildNode
         fatherNode = FailNode.failFatherNode
         childAddress = FailNode.address
@@ -82,6 +87,24 @@ def execute(flag):
         subTree = new_expand_tree(childNode)
         fatherNode.RemoveChild(childNode)
         fatherNode.AddChild(subTree, childAddress)
+    return 0
+
+
+# execute
+def init_tree():
+    # print('now test execution')
+    # print('读取到的GoalNode:', Node.goal_node)
+    Node.root = FallbackNode('root')
+    # 在这里添加目标节点
+    if Node.goal_node != {}:
+        goal_node = SubConditionNode(**Node.goal_node)
+        Node.root.AddChild(goal_node)
+        Node.goal_node = {}
+
+    draw_thread = threading.Thread(target=new_draw_tree, args=(Node.root,))
+    draw_thread.start()
+
+    execute(Node.root)
 
 
 # 暂写，不一定正确
@@ -90,16 +113,18 @@ def new_expand_tree(node):
     subtree = FallbackNode('Fallback')
     subtree.AddChild(node)
     sequence = SequenceNode('Sequence')
-    # 这里有问题
+    # 要考虑没有动作节点的情况
     for item in GlobalVar.subtree_list:
+        # print('item', item)
         pnode = item.get('post_condition')
 
         if pnode.get('name') == node.name and pnode.get('parm') == node.parm:
             pre_condition_list = item.get('pre_condition_list')
             for i in pre_condition_list:
                 sequence.AddChild(SubConditionNode(**i))
-            skill = SubActionNode(**item.get('skill'))
-            sequence.AddChild(skill)
+            if item.get('skill').get('name') != '':
+                skill = SubActionNode(**item.get('skill'))
+                sequence.AddChild(skill)
     subtree.AddChild(sequence)
     return subtree
 
@@ -115,6 +140,7 @@ def print_object(obj):
 
 
 if __name__ == "__main__":
-    test()
+    # test()
     app.run(host='0.0.0.0', port=5001, debug=True)
+
 

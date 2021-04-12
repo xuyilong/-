@@ -8,8 +8,8 @@ class ObjectStatus:
                    {'name': 'search_rack_type', 'status': 0},
                    {'name': 'st_for_coffee_type', 'status': 0},
                    {'name': 'sr_for_coffee_type', 'status': 0},
-                   {'name': 'searching_type', 'status': 0},
-                   {'name': 'search_type', 'status': 0},
+                   {'name': 'searching_type', 'status': 0},  # 标记是否正在search
+                   {'name': 'search_type', 'status': 0},  # 主要标记是move还是move_and_search，这里很可能用不到
                    ]
 
 

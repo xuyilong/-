@@ -22,9 +22,18 @@ def hello():
     return 'Hello,world!'
 
 
+@app.route('/s_and_e', methods=['get'])
+def s_and_e():
+    # print(request.args)
+    flag = request.args.get('flag')
+    # print('newbot.flag', flag, type(flag))
+    FunctionList.fun_s_and_e(flag)
+    return 's_and_e'
+
+
 @app.route('/calling_condition_function', methods=['post'])
 def calling_condition_function():
-    print(request.json)
+    # print(request.json)
     name = request.json.get('name')
     parm = request.json.get('parm')
     # 在这里使用setattr
@@ -34,12 +43,12 @@ def calling_condition_function():
             return 'right'
     else:
         print("------------------------404", '*'*20)
-    return 'wrong'
+    return 'condition_wrong'
 
 
 @app.route('/calling_action_function', methods=['post'])
 def calling_action_function():
-    print(request.json)
+    # print(request.json)
     name = request.json.get('name')
     parm = request.json.get('parm')
     # 在这里使用setattr
@@ -48,7 +57,7 @@ def calling_action_function():
         getattr(FunctionList, name)(**parm)
     else:
         print("------------------------404", '*'*20)
-    return 'wrong'
+    return 'action_wrong'
 
 
 @app.route('/get_list', methods=['get'])
@@ -61,7 +70,6 @@ def newbot():
         name, gid = id_add(id_name)
         IDList.change_value(name, gid)
 
-    print('newbot')
     return jsonify(IDList.IDList.id_list, ObjectStatus.ObjectStatus.status_list,
                    FunctionList.FunctionList.action_function_list,
                    FunctionList.FunctionList.condition_function_list)
@@ -69,3 +77,6 @@ def newbot():
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)
+
+
+# 暂觉得xian应该放这里，并且可以修改move和search的部分

@@ -8,17 +8,27 @@ import IDList
 class FunctionList:
     action_function_list = [
         {'name': 'move_to', 'parm': {'object_id': 0}},
-        {'name': 'move_and_search', 'parm': {'object_id': 0, 'task_name': 'MASTable'}},
+        {'name': 'search', 'parm': {'place_id': 0, 'object_name': 'coffee'}},
         {'name': 'pour', 'parm': {}},
         {'name': 'grasp', 'parm': {'object_id': 0}},
         {'name': 'open_door', 'parm': {}},
     ]
     condition_function_list = [
         {'name': 'is_robot_close_to', 'parm': {'object_id': 0}},
+        {'name': 'path_free', 'parm': {'object_id': 0}},
+        # delivery 好像用不到
         {'name': 'delivery_object', 'parm': {'object_id': 0, 'location_id': 0, 'object_name': 'CoffeeCup'}},
         {'name': 'is_object_at', 'parm': {'object_id': 0, 'location_id': 0}},
         {'name': 'type_ok', 'parm': {'object_name': 'CoffeeCup'}},
     ]
+
+
+def fun_s_and_e(flag):
+    # print('flag', flag, type(flag))
+    if flag == '1':
+        vrep.simxStartSimulation(IDList.clientID.mainID, vrep.simx_opmode_oneshot)
+    elif flag == '0':
+        vrep.simxPauseSimulation(IDList.clientID.mainID, vrep.simx_opmode_oneshot)
 
 
 # 下面部分要传入object_id，是某个场景下获取信息的方式，应该从场景中传入
@@ -184,7 +194,7 @@ def grasp(object_id):
         time.sleep(20)
         ObjectStatus.change('lh_have_pot_type', 1)
     else:
-        print("something wrong!!")
+        print("grasp something wrong!!")
 
 
 def open_gripper():
@@ -205,39 +215,43 @@ def move_to(object_id, type='cube'):
 
 
 # 技能 move_close_to_and_search
-def move_and_search(object_id, task_name, type='cube'):
-    object_id = int(object_id)
+def search(place_id, object_name):  # object  name还是id呢
     ObjectStatus.change('search_type', 1)
-    print('moving close to object', object_id)
-    cip = get_closest_inverse_pose(object_id, IDList.find('newbot_vehicleTargetPosition'), type)
-    set_pose(IDList.find('newbot_vehicleTargetPosition'), -1, cip)
 
-    # keyi zengjia shexiangtou de guanjie kongzhi
-    if task_name == 'MASTable':
-        ObjectStatus.change('searching_type', 1)
-        time.sleep(5)
-        ObjectStatus.change('searching_type', 0)
-        ObjectStatus.change('search_table_type', 1)
-    elif task_name == 'MASRack':
-        time.sleep(5)
-        ObjectStatus.change('searching_type', 1)
-        time.sleep(5)
-        ObjectStatus.change('searching_type', 0)
-        ObjectStatus.change('search_rack_type', 1)
-    elif task_name == 'MASTForCoffee':
-        time.sleep(15)
+    place_id = int(place_id)
+
+    # 可以增加摄像头的关节控制
+    # if task_name == 'table':
+    #     ObjectStatus.change('searching_type', 1)
+    #     time.sleep(5)
+    #     ObjectStatus.change('searching_type', 0)
+    #     ObjectStatus.change('search_table_type', 1)
+    # elif task_name == 'rack':
+    #     time.sleep(5)
+    #     ObjectStatus.change('searching_type', 1)
+    #     time.sleep(5)
+    #     ObjectStatus.change('searching_type', 0)
+    #     ObjectStatus.change('search_rack_type', 1)
+    if place_id == IDList.find('Fake_table') and object_name == 'coffee':
         ObjectStatus.change('searching_type', 1)
         time.sleep(5)
         ObjectStatus.change('searching_type', 0)
         ObjectStatus.change('st_for_coffee_type', 1)
-    # elif task_name == 'MASRForCoffee':
-    #     time.sleep(10)
-    #     ObjectStatus.sr_for_coffee_type = 1
+
+    # elif task_name == 'TForCoffee':
+    #     time.sleep(15)
+    #     ObjectStatus.change('searching_type', 1)
+    #     time.sleep(5)
+    #     ObjectStatus.change('searching_type', 0)
+    #     ObjectStatus.change('st_for_coffee_type', 1)
+    # # elif task_name == 'MASRForCoffee':
+    # #     time.sleep(10)
+    # #     ObjectStatus.sr_for_coffee_type = 1
 
 
 # 条件 is_robot_close_2d
 def is_robot_close_to(object_id, threshold=0.1):
-    # print('success?', object_id)
+    print('success?', object_id)
     # print('type', type(object_id).__name__)
     object_id = int(object_id)
     # print('type', type(object_id))
@@ -268,7 +282,7 @@ def is_object_at(object_1_id, object_2_id, threshold=0.12):
 def type_ok(object_name):
     name_list = [
         {'CoffeeCup': 'cup_type'}, {'OpenDoor': 'door_type'}, {'LhHavePot': 'lh_have_pot_type'},
-        {'RhHaveCup': 'rh_have_cup_type'}, {'PathFree': 'path_free_type'}, {'SearchTable': 'search_table_type'},
+        {'RhHaveCup': 'rh_have_cup_type'}, {'SearchTable': 'search_table_type'},
         {'SearchRack': 'search_rack_type'}, {'STForCoffee': 'st_for_coffee_type'},
         {'SRForCoffee': 'sr_for_coffee_type'}
     ]
@@ -279,8 +293,22 @@ def type_ok(object_name):
     return False
 
 
-# 条件 新增
+# 条件 新增 暂时没用到
 def delivery_object(location_id, object_id, object_name):
     print('delivery_object')
     return is_object_at(object_id, location_id, 1) and type_ok(object_name)
 
+
+# 条件 新增
+def path_free(object_id):
+    # 根据什么判断呢
+    # 暂定 到前后门 1 到桌子门没开 0 到桌子门开了 1
+    object_id = int(object_id)
+    if object_id == IDList.find('Fake_table'):
+        if ObjectStatus.find('door_type') == 0:
+            return False
+        else:
+            return True
+    if object_id == IDList.find('Fake_front_door') or object_id == IDList.find('Fake_behind_door'):
+        return True
+    return True

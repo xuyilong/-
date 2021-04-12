@@ -18,9 +18,9 @@ class SubActionNode(ActionNode):
             setattr(self, i, self.parm[i])
 
     def Execute(self, args):
-        calling_action_function(self.name, self.parm)
         self.SetStatus(NodeStatus.Running)
         self.SetColor(NodeColor.Gray)
+        calling_action_function(self.name, self.parm)
         print('excuting...')
 
 

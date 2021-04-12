@@ -1,7 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="16a87c9f-2d8b-48bb-b15d-61a8c543a7e9" name="Default Changelist" comment="" />
+    <list default="true" id="16a87c9f-2d8b-48bb-b15d-61a8c543a7e9" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/data_test_2.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/js/Test_2.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/简介.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data_test.html" beforeDir="false" afterPath="$PROJECT_DIR$/data_test.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/Test.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/Test.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../test_5_behavior_tree/BTSearchActionNodes.py" beforeDir="false" afterPath="$PROJECT_DIR$/../test_5_behavior_tree/BTSearchActionNodes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../test_5_behavior_tree/BTSearchConditionNodes.py" beforeDir="false" afterPath="$PROJECT_DIR$/../test_5_behavior_tree/BTSearchConditionNodes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../test_5_behavior_tree/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/../test_5_behavior_tree/test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../test_5_newbot/FunctionList.py" beforeDir="false" afterPath="$PROJECT_DIR$/../test_5_newbot/FunctionList.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../test_5_newbot/ObjectStatus.py" beforeDir="false" afterPath="$PROJECT_DIR$/../test_5_newbot/ObjectStatus.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../test_5_newbot/newbot.py" beforeDir="false" afterPath="$PROJECT_DIR$/../test_5_newbot/newbot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../test_5_newbot/unimportant.py" beforeDir="false" afterPath="$PROJECT_DIR$/../test_5_newbot/unimportant.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -11,10 +25,15 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="HTML File" />
+        <option value="JavaScript File" />
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
   <component name="ProjectId" id="1prdwAuYH3o4lV1PKRLk2YwCWp3" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -25,7 +44,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../graduation-design/test_5_behavior_tree" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../test_5_behavior_tree" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -79,6 +98,12 @@
       <workItem from="1616979877635" duration="2656000" />
       <workItem from="1617003203841" duration="12709000" />
       <workItem from="1617239194085" duration="706000" />
+      <workItem from="1617261810247" duration="4063000" />
+      <workItem from="1617778433142" duration="1517000" />
+      <workItem from="1617786046907" duration="1512000" />
+      <workItem from="1617847498302" duration="1111000" />
+      <workItem from="1617848956812" duration="2342000" />
+      <workItem from="1618190513724" duration="1956000" />
     </task>
     <servers />
   </component>
@@ -87,6 +112,18 @@
   </component>
   <component name="UnknownFeatures">
     <option featureType="com.intellij.fileTypeFactory" implementationName="*.name" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

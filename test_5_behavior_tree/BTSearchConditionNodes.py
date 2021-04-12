@@ -13,7 +13,7 @@ class SubConditionNode(ConditionNode):
         self.name = name
         self.parm = parm['parm']
         self.flag = 0
-        print('aaaa', self.parm)
+        # print('aaaa', self.parm)
         for i in self.parm:
             # print('i=', i)
             setattr(self, i, self.parm[i])

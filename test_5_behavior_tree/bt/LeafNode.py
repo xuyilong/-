@@ -6,7 +6,7 @@ class LeafNode(TreeNode):
     __metaclass__ = ABCMeta  # abstract class
 
     def __init__(self, name):
-        TreeNode.__init__(self,name)
+        TreeNode.__init__(self, name)
         self.nodeClass = 'Leaf'
 
         self.path = []

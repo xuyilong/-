@@ -7,7 +7,6 @@ from BTSearchActionNodes import *
 from BTSearchConditionNodes import *
 from FailNode import FailNode
 from id_list import IDList
-from global_var import GlobalVar
 
 
 def newbot():
@@ -102,22 +101,6 @@ def xian():
         # else:
         #     print('Now no node running')
         time.sleep(0.5)
-
-
-# 暂写，不一定正确
-def new_expand_tree(node):
-    print('newExpandTree')
-    subtree = FallbackNode('Fallback')
-    subtree.AddChild(node)
-    for item in GlobalVar.subtree_list:
-        if item.get('post_condition') == node:
-            sequence = SequenceNode('Sequence')
-            pre_condition_list = item.get('pre_condition_list')
-            for i in pre_condition_list:
-                sequence.AddChild(SubConditionNode(**i))
-            skill = SubActionNode(**item.get('skill'))
-            sequence.AddChild(skill)
-    return subtree
 
 
 def expandTree(node):

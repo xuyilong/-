@@ -1,13 +1,13 @@
 class IDList:
-    id_list = [{'name': 'newbot_vehicleTargetPosition', 'value': None},
+    id_list = [{'name': 'newbot_vehicle_target_position', 'value': None},
                {'name': 'newbot_reference', 'value': None},
-               {'name': 'Jaco_target', 'value': None},
-               {'name': 'Fake_table', 'value': None},
-               {'name': 'Fake_cup', 'value': None},
-               {'name': 'goalLocation', 'value': None},
-               {'name': 'cup_0', 'value': None},
-               {'name': 'Fake_front_door', 'value': None},
-               {'name': 'Fake_behind_door', 'value': None},
+               {'name': 'left_hand', 'value': None},
+               {'name': 'right_hand', 'value': None},
+               {'name': 'cup_2', 'value': None},
+               {'name': 'cup_1', 'value': None},
+               {'name': 'door_1_f', 'value': None},
+               {'name': 'door_1_b', 'value': None},
+               {'name': 'location_1', 'value': None},
                ]
 
 

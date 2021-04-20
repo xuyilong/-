@@ -22,21 +22,27 @@ function dic_to_str(dic_list) {
 const app = new Vue({
 	el:"#app",
 	data:{
+		// 展示列表
 		id_list:[],
 		status_list:[],
 		action_list:[],
 		action_show_list:[],
 		condition_list:[],
 		condition_show_list:[],
+		// 用户输入
+		parm:{},
+		name:'',
 		skill:{},
 		post_condition:{},
 		pre_condition_list:[],
 		subtree_list:[],
+		subtree_show_list:[],
+
 		goal_name:'',
 		goal_parm:{},
 		goal_condition:{},
-		parm:{},
-		name:'',
+		goal_condition_list:[],
+		// 步骤标志
 		active:0,
 
 	},
@@ -78,9 +84,7 @@ const app = new Vue({
 		post_condition_next(){
 			this.active++
 			this.post_condition.name = this.name
-			this.post_condition.parm = JSON.parse(JSON.stringify(this.parm))
 			this.name = ''
-			this.parm = {}
 		},
 		pre_condition_next(){
 			let pre_condition = {}
@@ -90,17 +94,26 @@ const app = new Vue({
 			this.name = ''
 			this.parm = {}
 		},
+		// 将子树存储到列表
 		subtree_commit() {
 			this.pre_condition_next()
-			this.subtree_list.push({'skill':JSON.parse(JSON.stringify(this.skill)),
+			let subtree = {'skill':JSON.parse(JSON.stringify(this.skill)),
 							'post_condition':JSON.parse(JSON.stringify(this.post_condition)),
-							'pre_condition_list':JSON.parse(JSON.stringify(this.pre_condition_list))})
+							'pre_condition_list':JSON.parse(JSON.stringify(this.pre_condition_list))}
+			if(this.subtree_show_list.indexOf(subtree)){
+				this.subtree_list.push(subtree)
+			}
+			else{
+				this.$alert('这是一段内容', '标题名称', {
+				  confirmButtonText: '确定',
+				});
+			}
 			this.skill = {}
 			this.post_condition = {}
 			this.pre_condition_list = []
 			this.active = 0
-
 		},
+		// 将存储过的子树发送到规划器
 		subtree_list_submit() {
 			console.log('subtree_list_submit')
 			axios.post('http://localhost:5001/sendSubtreeList', this.subtree_list)
@@ -111,6 +124,7 @@ const app = new Vue({
 				console.log("error",error);
 			});
 		},
+		// 将目标条件发送到规划器
 		goal_submit() {
 			console.log('goal_submit')
 			this.goal_condition.name = this.goal_name
@@ -151,6 +165,15 @@ const app = new Vue({
 				console.log("/get", response)
 				that.action_show_list = dic_to_str(that.action_list)
 				that.condition_show_list = dic_to_str(that.condition_list)
+				;
+		})
+		.catch(function (error) {
+			console.log("error", error);
+		});
+		axios.get('http://localhost:5001/get_subtree_list')
+			.then(function (response) {
+				console.log(response.data)
+				that.subtree_show_list = response.data
 				;
 		})
 		.catch(function (error) {

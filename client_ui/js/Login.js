@@ -32,6 +32,11 @@ const app = new Vue({
 				console.log("res.data",res.data());
 			});
 			*/
-		}
+		},
+		open() {
+			this.$alert('这是一段内容', '标题名称', {
+			  confirmButtonText: '确定',
+        	});
+      }
 	}
 })

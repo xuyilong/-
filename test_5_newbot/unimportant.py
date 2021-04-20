@@ -2,14 +2,25 @@ import ObjectStatus
 
 
 def wd():
-    print(1 == 1)
+    ObjectStatus.add_status('xu', 10)
+    new_list = ObjectStatus.ObjectStatus.status_list
+    for i in new_list:
+        if i.get('name') == 'xu':
+            print('wozhongla')
+        print(i)
     print('do what')
     return 1 == 1
 
 
+def aa():
+    dic1 = {'a1': 'b1', 'a2': 'b2'}
+    print(dic1.get('a3'))
+
+
 if __name__ == '__main__':
-    flag = wd()
-    print(flag)
+    aa()
+    # flag = wd()
+    # print(flag)
 
 
 # 仿真开始与停止

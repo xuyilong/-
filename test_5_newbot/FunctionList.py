@@ -5,21 +5,21 @@ import ObjectStatus
 import IDList
 
 
+# 根据图来确定条件和动作
 class FunctionList:
     action_function_list = [
-        {'name': 'move_to', 'parm': {'object_id': 0}},
-        {'name': 'search', 'parm': {'place_id': 0, 'object_name': 'coffee'}},
-        {'name': 'pour', 'parm': {}},
+        {'name': 'move_to', 'parm': {'location_id': 0}},
+        {'name': 'pour_coffee', 'parm': {'object_id_1': 0, 'object_id_2': 0}},
         {'name': 'grasp', 'parm': {'object_id': 0}},
-        {'name': 'open_door', 'parm': {}},
+        {'name': 'open_door', 'parm': {'door_id': 0}},
     ]
     condition_function_list = [
-        {'name': 'is_robot_close_to', 'parm': {'object_id': 0}},
-        {'name': 'path_free', 'parm': {'object_id': 0}},
-        # delivery 好像用不到
-        {'name': 'delivery_object', 'parm': {'object_id': 0, 'location_id': 0, 'object_name': 'CoffeeCup'}},
-        {'name': 'is_object_at', 'parm': {'object_id': 0, 'location_id': 0}},
-        {'name': 'type_ok', 'parm': {'object_name': 'CoffeeCup'}},
+        {'name': 'is_robot_close_to', 'parm': {'location_id': 0}},
+        {'name': 'path_free', 'parm': {'location_id': 0}},
+        {'name': 'is_open', 'parm': {'door_id': 0}},
+        {'name': 'could_open', 'parm': {'door_id': 0}},
+        {'name': 'is_hold', 'parm': {'object_id': 0, 'hand_id': 0}},
+        {'name': 'is_ready', 'parm': {'object_id': 0, 'object_name': ''}}
     ]
 
 
@@ -101,81 +101,21 @@ def close_connection(client_id):
     print('Connection to remote API server closed')
 
 
-def get_closest_inverse_pose(object_id, ref_id, type='cube'):
-    if type is 'cube':
-        z_shift = -0.03
-    elif type is 'goal':
-        z_shift = 0
-
-    distance = 10000000000
-    closest_inverse_pose = None
-    dummy_id = get_id(b'Disc')
-    shift = 0
-
-    # shift in x
-    empty_position = [0, 0, -0.03, 0, 0, 0]
-    empty_position[0] += shift
-    set_pose(dummy_id, object_id, empty_position)
-    set_orientation(dummy_id, object_id, [0, 0, 3.14 / 2])
-
-    dummy_rel_position = get_position(dummy_id, ref_id)
-    dummy_distance = np.linalg.norm(dummy_rel_position)
-    if dummy_distance < distance:
-        closest_inverse_pose = get_pose(dummy_id, -1)
-        distance = dummy_distance
-
-    empty_position = [0, 0, -0.03, 0, 0, 0]
-    empty_position[0] -= shift
-
-    set_pose(dummy_id, object_id, empty_position)
-    set_orientation(dummy_id, object_id, [0, 0, -3.14 / 2])
-    dummy_rel_position = get_position(dummy_id, ref_id)
-    dummy_distance = np.linalg.norm(dummy_rel_position)
-    if dummy_distance < distance:
-        closest_inverse_pose = get_pose(dummy_id, -1)
-        distance = dummy_distance
-
-    # shift in y
-    empty_position = [0, 0, -0.03, 0, 0, 0]
-    empty_position[1] += shift
-    set_pose(dummy_id, object_id, empty_position)
-    set_orientation(dummy_id, object_id, [0, 0, 3.14])
-
-    dummy_rel_position = get_position(dummy_id, ref_id)
-    dummy_distance = np.linalg.norm(dummy_rel_position)
-    if dummy_distance < distance:
-        closest_inverse_pose = get_pose(dummy_id, -1)
-        distance = dummy_distance
-
-    empty_position = [0, 0, -0.03, 0, 0, 0]
-    empty_position[1] -= shift
-
-    set_pose(dummy_id, object_id, empty_position)
-    dummy_rel_position = get_position(dummy_id, ref_id)
-    dummy_distance = np.linalg.norm(dummy_rel_position)
-    if dummy_distance < distance:
-        closest_inverse_pose = get_pose(dummy_id, -1)
-        distance = dummy_distance
-
-    return closest_inverse_pose
+# 好像没用
+def are_objects_close(object_1_id, object_2_id, threshold):
+    position = get_position(object_1_id, object_2_id)
+    return np.linalg.norm(position) < threshold
 
 
-# 技能
-def open_door():
-    if ObjectStatus.find('cup_type') == -1:
-        print('open_door something wrong!!!')
-    elif ObjectStatus.find('cup_type') == 0:
-        vrep.simxSetIntegerSignal(IDList.clientID.mainID, b'armCommand', 2, vrep.simx_opmode_oneshot_wait)
-        time.sleep(12)
-        ObjectStatus.change('door_type', 1)
-    else:
-        vrep.simxSetIntegerSignal(IDList.clientID.mainID, b'armCommand', 22, vrep.simx_opmode_oneshot_wait)
-        time.sleep(12)
-        ObjectStatus.change('door_type', 1)
+# 技能 move_close_to_object
+def move_to(location_id):
+    location_id = int(location_id)
+    print('moving close to object', location_id)
+    set_pose(IDList.find('newbot_vehicle_target_position'), -1, get_pose(location_id, -1))
 
 
 # 技能 pour_coffee
-def pour():
+def pour_coffee(object_id_1, object_id_2):
     vrep.simxSetIntegerSignal(IDList.clientID.mainID, b'armCommand', 4, vrep.simx_opmode_oneshot_wait)
     time.sleep(35)
     ObjectStatus.change('cup_type', 1)
@@ -185,11 +125,13 @@ def pour():
 
 # 技能 grasp_cup
 def grasp(object_id):
-    if object_id == IDList.find('cup_0'):  # 'cup0_id'
+    object_id = int(object_id)
+    if object_id == IDList.find('cup_1'):  # 'cup0_id'
         vrep.simxSetIntegerSignal(IDList.clientID.mainID, b'armCommand', 3, vrep.simx_opmode_oneshot_wait)
+        # 看这里能不能在其他地方改，动作执行完之后
         time.sleep(23)
         ObjectStatus.change('rh_have_cup_type', 1)
-    elif object_id == IDList.find('Fake_cup'):  # 'cup_id'
+    elif object_id == IDList.find('cup_2'):  # 'cup_id'
         vrep.simxSetIntegerSignal(IDList.clientID.mainID, b'armCommand', 33, vrep.simx_opmode_oneshot_wait)
         time.sleep(20)
         ObjectStatus.change('lh_have_pot_type', 1)
@@ -197,118 +139,71 @@ def grasp(object_id):
         print("grasp something wrong!!")
 
 
-def open_gripper():
-    vrep.simxSetIntegerSignal(IDList.clientID.mainID, b'gripperCommand', 1, vrep.simx_opmode_oneshot_wait)
-
-
-def close_gripper():
-    vrep.simxSetIntegerSignal(IDList.clientID.mainID, b'gripperCommand', 0, vrep.simx_opmode_oneshot_wait)
-
-
-# 技能 move_close_to_object
-def move_to(object_id, type='cube'):
-    object_id = int(object_id)
-    ObjectStatus.change('search_type', 0)
-    print('moving close to object', object_id)
-    cip = get_closest_inverse_pose(object_id, IDList.find('newbot_vehicleTargetPosition'), type)
-    set_pose(IDList.find('newbot_vehicleTargetPosition'), -1, cip)
-
-
-# 技能 move_close_to_and_search
-def search(place_id, object_name):  # object  name还是id呢
-    ObjectStatus.change('search_type', 1)
-
-    place_id = int(place_id)
-
-    # 可以增加摄像头的关节控制
-    # if task_name == 'table':
-    #     ObjectStatus.change('searching_type', 1)
-    #     time.sleep(5)
-    #     ObjectStatus.change('searching_type', 0)
-    #     ObjectStatus.change('search_table_type', 1)
-    # elif task_name == 'rack':
-    #     time.sleep(5)
-    #     ObjectStatus.change('searching_type', 1)
-    #     time.sleep(5)
-    #     ObjectStatus.change('searching_type', 0)
-    #     ObjectStatus.change('search_rack_type', 1)
-    if place_id == IDList.find('Fake_table') and object_name == 'coffee':
-        ObjectStatus.change('searching_type', 1)
-        time.sleep(5)
-        ObjectStatus.change('searching_type', 0)
-        ObjectStatus.change('st_for_coffee_type', 1)
-
-    # elif task_name == 'TForCoffee':
-    #     time.sleep(15)
-    #     ObjectStatus.change('searching_type', 1)
-    #     time.sleep(5)
-    #     ObjectStatus.change('searching_type', 0)
-    #     ObjectStatus.change('st_for_coffee_type', 1)
-    # # elif task_name == 'MASRForCoffee':
-    # #     time.sleep(10)
-    # #     ObjectStatus.sr_for_coffee_type = 1
+# 技能 这里也可以根据是开的前门还是后门确定
+def open_door(door_id):
+    if ObjectStatus.find('cup_type') == -1:
+        print('open_door something wrong!!!')
+    elif ObjectStatus.find('cup_type') == 0:
+        vrep.simxSetIntegerSignal(IDList.clientID.mainID, b'armCommand', 2, vrep.simx_opmode_oneshot_wait)
+        # 这里可以改进，不用在这里改door_type，用那个isOpen去调用仿真器吧
+        time.sleep(12)
+        ObjectStatus.change('door_type', 1)
+    else:
+        vrep.simxSetIntegerSignal(IDList.clientID.mainID, b'armCommand', 22, vrep.simx_opmode_oneshot_wait)
+        time.sleep(12)
+        ObjectStatus.change('door_type', 1)
 
 
 # 条件 is_robot_close_2d
-def is_robot_close_to(object_id, threshold=0.1):
-    print('success?', object_id)
+def is_robot_close_to(location_id):
+    # print('success?', object_id)
     # print('type', type(object_id).__name__)
-    object_id = int(object_id)
+    location_id = int(location_id)
     # print('type', type(object_id))
-    position = get_position(object_id, IDList.find('newbot_reference'))
-    return np.linalg.norm(position) < threshold
-
-
-# 好像没用
-def are_objects_close(object_1_id, object_2_id, threshold):
-    position = get_position(object_1_id, object_2_id)
-    return np.linalg.norm(position) < threshold
-
-
-# 条件  are_objects_close2d
-def is_object_at(object_1_id, object_2_id, threshold=0.12):
-    object_1_id = int(object_1_id)
-    object_2_id = int(object_2_id)
-    # 不知道有啥用，先注释看看会不会有影响
-    # VrepAPI.current_object_goal_id = object_2_id
-    # VrepAPI.current_object_to_move_to_goal = object_1_id
-    position = get_position(object_1_id, object_2_id)
-    position[1] = position[1] - 0.1
-
-    return np.linalg.norm(position) < threshold
+    position = get_position(location_id, IDList.find('newbot_reference'))
+    return np.linalg.norm(position) < 0.2
 
 
 # 条件 新增
-def type_ok(object_name):
-    name_list = [
-        {'CoffeeCup': 'cup_type'}, {'OpenDoor': 'door_type'}, {'LhHavePot': 'lh_have_pot_type'},
-        {'RhHaveCup': 'rh_have_cup_type'}, {'SearchTable': 'search_table_type'},
-        {'SearchRack': 'search_rack_type'}, {'STForCoffee': 'st_for_coffee_type'},
-        {'SRForCoffee': 'sr_for_coffee_type'}
-    ]
-    for item in name_list:
-        if object_name in item:
-            return ObjectStatus.find(item.get(object_name)) == 1
-
-    return False
-
-
-# 条件 新增 暂时没用到
-def delivery_object(location_id, object_id, object_name):
-    print('delivery_object')
-    return is_object_at(object_id, location_id, 1) and type_ok(object_name)
-
-
-# 条件 新增
-def path_free(object_id):
+def path_free(location_id):  # cup_1 cup_2 door_1_f door_1_b location_1
     # 根据什么判断呢
-    # 暂定 到前后门 1 到桌子门没开 0 到桌子门开了 1
-    object_id = int(object_id)
-    if object_id == IDList.find('Fake_table'):
+    # 暂定 到前后门 1 到杯子门没开 0 到杯子门开了 1
+    location_id = int(location_id)
+    # print('id__', location_id)
+    if location_id == IDList.find('cup_1') or location_id == IDList.find('location_1'):
         if ObjectStatus.find('door_type') == 0:
             return False
         else:
             return True
-    if object_id == IDList.find('Fake_front_door') or object_id == IDList.find('Fake_behind_door'):
+    if location_id == IDList.find('door_1_f') or location_id == IDList.find('door_1_b'):
         return True
     return True
+
+
+def is_open(door_id):
+    if ObjectStatus.find('door_type') == 1:
+        return True
+    else:
+        return False
+
+
+def could_open(door_id):
+    return True
+
+
+def is_hold(object_id, hand_id):
+    hand_id = int(hand_id)
+    if hand_id == IDList.find('left_hand'):
+        if ObjectStatus.find('lh_have_pot_type') == 1:
+            return True
+    if hand_id == IDList.find('right_hand'):
+        if ObjectStatus.find('rh_have_cup_type') == 1:
+            return True
+
+
+def is_ready(object_id, object_name):
+    # 这里可以调用一个search的方法，然后仿真器执行后返回一个状态
+    if ObjectStatus.find('cup_type') == 1:
+        return True
+    else:
+        return False

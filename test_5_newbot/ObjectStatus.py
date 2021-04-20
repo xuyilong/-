@@ -1,15 +1,8 @@
 class ObjectStatus:
-    status_list = [{'name': 'cup_type', 'status': 0},
-                   {'name': 'door_type', 'status': 0},
+    status_list = [{'name': 'cup_type', 'status': 0},   # 标记杯子里面有没有咖啡
+                   {'name': 'door_type', 'status': 0},  # 标记门是否开了
                    {'name': 'lh_have_pot_type', 'status': 0},
                    {'name': 'rh_have_cup_type', 'status': 0},
-                   {'name': 'path_free_type', 'status': 1},
-                   {'name': 'search_table_type', 'status': 0},
-                   {'name': 'search_rack_type', 'status': 0},
-                   {'name': 'st_for_coffee_type', 'status': 0},
-                   {'name': 'sr_for_coffee_type', 'status': 0},
-                   {'name': 'searching_type', 'status': 0},  # 标记是否正在search
-                   {'name': 'search_type', 'status': 0},  # 主要标记是move还是move_and_search，这里很可能用不到
                    ]
 
 

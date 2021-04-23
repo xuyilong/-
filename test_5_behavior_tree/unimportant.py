@@ -3,16 +3,9 @@ import toDB
 
 
 def aa():
-    a = [1, 2, 3]
-    print(a)
-    return a
+    al = [11, 22, 33]
+    for index, item in enumerate(al):
+        print(index, item)
 
 
-def bb():
-    b = aa()
-    b.append(4)
-    print('b', b)
-    aa()
-
-
-bb()
+aa()

@@ -39,25 +39,8 @@
                 </el-select>
                 <el-button style="margin-top: 12px;" @click="post_condition_next">下一步</el-button>
             </div>
-<!--        选择动作    -->
-            <div v-if="active == 1">
-                <a>请选择动作方法以及相应的参数</a>
-                <el-select v-model="name" placeholder="请选择" @change="name_to_parm_action">
-                    <el-option
-                      v-for="item in action_list"
-                      :key="item.name"
-                      :label="item.name"
-                      :value="item.name">
-                    </el-option>
-                </el-select>
-                <el-form v-for="(index,item) in parm">
-                    <a>{{item}}</a>
-                    <el-input v-model="parm[item]" placeholder="请填写"></el-input>
-                </el-form>
-                <el-button style="margin-top: 12px;" @click="action_next">下一步</el-button>
-            </div>
 <!--        选择前置条件    -->
-            <div v-if="active == 2">
+            <div v-if="active == 1">
                 <a>请选择前置条件方法以及相应的参数</a>
                 <el-select v-model="name" placeholder="请选择" @change="name_to_parm_condition">
                     <el-option
@@ -73,6 +56,23 @@
                 </el-form>
                 <el-button style="margin-top: 12px;" @click="pre_condition_next">添加下一个前置条件</el-button>
                 <el-button style="margin-top: 12px;" @click="subtree_commit">完成</el-button>
+            </div>
+<!--        选择动作    -->
+            <div v-if="active == 2">
+                <a>请选择动作方法以及相应的参数</a>
+                <el-select v-model="name" placeholder="请选择" @change="name_to_parm_action">
+                    <el-option
+                      v-for="item in action_list"
+                      :key="item.name"
+                      :label="item.name"
+                      :value="item.name">
+                    </el-option>
+                </el-select>
+                <el-form v-for="(index,item) in parm">
+                    <a>{{item}}</a>
+                    <el-input v-model="parm[item]" placeholder="请填写"></el-input>
+                </el-form>
+                <el-button style="margin-top: 12px;" @click="action_next">下一步</el-button>
             </div>
 
         </div>
@@ -93,8 +93,9 @@
                 </el-select>
                 <el-form v-for="(index,item) in goal_parm">
                     <a>{{item}}</a>
-                    <el-input v-model="goal_parm[item]" placeholder="请填写目标条件的参数（仅数字）"></el-input>
+                    <el-input v-model="goal_parm[item]" placeholder="请填写目标条件的参数"></el-input>
                 </el-form>
+                <el-button style="margin-top: 12px;" @click="goal_next">添加下一个目标条件</el-button>
                 <el-button style="margin-top: 12px;" @click="goal_submit">确定目标</el-button>
         </div>
 

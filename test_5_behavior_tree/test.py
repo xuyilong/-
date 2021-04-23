@@ -32,11 +32,11 @@ def get_subtree_list():
 
 
 # 从前端接收目标节点
-@app.route('/sendGoalNode', methods=['post'])
-def receive_goal_node():
-    Node.goal_node = request.json
-    print('goal_node', Node.goal_node)
-    return 'sendGoalNode'
+@app.route('/sendGoalList', methods=['post'])
+def receive_goal_list():
+    Node.goal_list = request.json
+    print('goal_list', Node.goal_list)
+    return 'sendGoalList'
 
 
 # 从前端接收的子树
@@ -69,7 +69,7 @@ def receive_start_and_end_signal():
 
 class Node:
     root = None
-    goal_node = {}
+    goal_list = []
     subtree_list = toDB.get_all()
     done = 0
     flag = ''
@@ -114,13 +114,15 @@ def execute(root):
 # execute，首次执行时，初始化环境
 def init_tree():
     # print('now test execution')
-    # print('读取到的GoalNode:', Node.goal_node)
-    Node.root = FallbackNode('root')
+    # print('读取到的GoalList:', Node.goal_list)
+    Node.root = SequenceNode('root')
     # 在这里添加目标节点
-    if Node.goal_node != {}:
-        goal_node = SubConditionNode(**Node.goal_node)
-        Node.root.AddChild(goal_node)
-        Node.goal_node = {}
+    if Node.goal_list:
+        for item in Node.goal_list:
+            print('goal_node', item)
+            node = SubConditionNode(**item)
+            Node.root.AddChild(node)
+        Node.goal_list = []
 
     draw_thread = threading.Thread(target=new_draw_tree, args=(Node.root,))
     draw_thread.start()
@@ -163,8 +165,11 @@ def new_expand_tree(node):
     # 如果子树列表中没有，那么就寻找知识
     if have_sub == 0:
         sublist = knowledge.find_from_know(node)
-        for item in sublist:
-            sequence.AddChild(SubConditionNode(**item))
+        for i, item in enumerate(sublist):
+            if i == len(sublist)-1:
+                sequence.AddChild(SubActionNode(**item))
+            else:
+                sequence.AddChild(SubConditionNode(**item))
     subtree.AddChild(sequence)
     return subtree
 

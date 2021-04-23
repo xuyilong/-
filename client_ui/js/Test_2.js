@@ -40,8 +40,7 @@ const app = new Vue({
 
 		goal_name:'',
 		goal_parm:{},
-		goal_condition:{},
-		goal_condition_list:[],
+		goal_list:[],
 		// 步骤标志
 		active:0,
 
@@ -94,6 +93,14 @@ const app = new Vue({
 			this.name = ''
 			this.parm = {}
 		},
+		goal_next(){
+			let goal = {}
+			goal.name = this.goal_name
+			goal.parm = JSON.parse(JSON.stringify(this.goal_parm))
+			this.goal_list.push(goal)
+			this.goal_name = ''
+			this.goal_parm = {}
+		},
 		// 将子树存储到列表
 		subtree_commit() {
 			this.pre_condition_next()
@@ -127,9 +134,8 @@ const app = new Vue({
 		// 将目标条件发送到规划器
 		goal_submit() {
 			console.log('goal_submit')
-			this.goal_condition.name = this.goal_name
-			this.goal_condition.parm = this.goal_parm
-			axios.post('http://localhost:5001/sendGoalNode', this.goal_condition)
+			this.goal_next()
+			axios.post('http://localhost:5001/sendGoalList', this.goal_list)
 			.then(function (response) {
 				console.log("response",response);
 			})

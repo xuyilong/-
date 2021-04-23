@@ -115,6 +115,7 @@ def move_to(location_id):
 
 
 # 技能 pour_coffee
+# 这个要改，估计很麻烦
 def pour_coffee(object_id_1, object_id_2):
     vrep.simxSetIntegerSignal(IDList.clientID.mainID, b'armCommand', 4, vrep.simx_opmode_oneshot_wait)
     time.sleep(35)
@@ -129,11 +130,11 @@ def grasp(object_id):
     if object_id == IDList.find('cup_1'):  # 'cup0_id'
         vrep.simxSetIntegerSignal(IDList.clientID.mainID, b'armCommand', 3, vrep.simx_opmode_oneshot_wait)
         # 看这里能不能在其他地方改，动作执行完之后
-        time.sleep(23)
+        time.sleep(16)
         ObjectStatus.change('rh_have_cup_type', 1)
     elif object_id == IDList.find('cup_2'):  # 'cup_id'
         vrep.simxSetIntegerSignal(IDList.clientID.mainID, b'armCommand', 33, vrep.simx_opmode_oneshot_wait)
-        time.sleep(20)
+        time.sleep(10)
         ObjectStatus.change('lh_have_pot_type', 1)
     else:
         print("grasp something wrong!!")
@@ -161,7 +162,7 @@ def is_robot_close_to(location_id):
     location_id = int(location_id)
     # print('type', type(object_id))
     position = get_position(location_id, IDList.find('newbot_reference'))
-    return np.linalg.norm(position) < 0.2
+    return np.linalg.norm(position) < 0.15
 
 
 # 条件 新增
